@@ -377,6 +377,7 @@
                 <p id="widgetDescription" class="detail-description">描述</p>
                 <div class="detail-meta">
                     <span id="widgetCategory" class="category-chip">分类</span>
+                    <span id="widgetPackage" class="category-chip" style="background:rgba(255,255,255,0.25);color:white;display:none;">📦 包名</span>
                     <span id="widgetPropsCount" class="category-chip">0 个属性</span>
                 </div>
             </div>
@@ -476,6 +477,15 @@
             document.getElementById('widgetDescription').textContent = widget.description;
             document.getElementById('widgetCategory').textContent = widget.categoryDisplay;
             document.getElementById('widgetPropsCount').textContent = widget.properties.length + ' 个属性';
+            
+            // 设置包名（如果是第三方 Widget）
+            const packageEl = document.getElementById('widgetPackage');
+            if (widget.package) {
+                packageEl.textContent = '📦 ' + widget.package;
+                packageEl.style.display = 'inline-block';
+            } else {
+                packageEl.style.display = 'none';
+            }
 
             // 设置预览
             document.getElementById('widgetPreview').innerHTML = widget.preview;
