@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flutter Widget 大全 - 详细属性与使用示例</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app">
+        <!-- 头部 -->
+        <header class="header">
+            <h1>📱 Flutter Widget 大全</h1>
+            <p class="subtitle">100+ 常用 Widget 详细属性与使用示例</p>
+        </header>
+
+        <!-- 搜索栏 -->
+        <div class="search-container">
+            <input type="text" id="searchInput" class="search-input" placeholder="搜索 Widget 名称或描述...">
+            <span class="search-icon">🔍</span>
+        </div>
+
+        <!-- 筛选器 -->
+        <div class="filters">
+            <div class="filter-group">
+                <span class="filter-label">分类:</span>
+                <button class="filter-btn active" data-category="all">全部分类</button>
+                <button class="filter-btn" data-category="basic">基础</button>
+                <button class="filter-btn" data-category="layout">布局</button>
+                <button class="filter-btn" data-category="material">Material</button>
+                <button class="filter-btn" data-category="input">输入</button>
+                <button class="filter-btn" data-category="navigation">导航</button>
+                <button class="filter-btn" data-category="animation">动画</button>
+            </div>
+            <div class="filter-group">
+                <span class="filter-label">常用度:</span>
+                <button class="filter-btn" data-usage="all">全部</button>
+                <button class="filter-btn" data-usage="high">🟢 常用</button>
+                <button class="filter-btn" data-usage="medium">🟡 一般</button>
+                <button class="filter-btn" data-usage="low">⚪ 较少</button>
+            </div>
+        </div>
+
+        <!-- 统计信息 -->
+        <div class="stats">
+            <span class="stat-item">共 <strong id="totalCount">0</strong> 个 Widget</span>
+            <span class="stat-badge high">🟢 常用 <strong id="highCount">0</strong></span>
+            <span class="stat-badge medium">🟡 一般 <strong id="mediumCount">0</strong></span>
+            <span class="stat-badge low">⚪ 较少 <strong id="lowCount">0</strong></span>
+        </div>
+
+        <!-- Widget 列表 -->
+        <div id="widgetList" class="widget-list"></div>
+
+        <!-- 空状态 -->
+        <div id="emptyState" class="empty-state" style="display: none;">
+            <div class="empty-icon">🔍</div>
+            <p>未找到相关 Widget</p>
+        </div>
+    </div>
+
+    <script src="detailed-docs.js"></script>
+    <script src="data.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Widget 详情 - Flutter Widget 大全</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+        .detail-page {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .back-nav {
+            margin-bottom: 20px;
+        }
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 14px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+        .back-btn:hover {
+            transform: translateX(-4px);
+        }
+        .widget-detail-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+        }
+        .detail-header {
+            background: linear-gradient(135deg, #4285f4, #8ab4f8);
+            color: white;
+            padding: 40px;
+        }
+        .detail-header h1 {
+            font-size: 32px;
+            margin: 0 0 12px 0;
+        }
+        .detail-header .usage-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-left: 12px;
+            vertical-align: middle;
+        }
+        .detail-header .usage-badge.high { background: rgba(255,255,255,0.3); color: #1e8e3e; }
+        .detail-header .usage-badge.medium { background: rgba(255,255,255,0.3); color: #b36b00; }
+        .detail-header .usage-badge.low { background: rgba(255,255,255,0.2); color: #666; }
+        .detail-description {
+            font-size: 16px;
+            opacity: 0.95;
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+        .detail-meta {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .detail-meta .category-chip {
+            background: rgba(255,255,255,0.25);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .preview-section {
+            padding: 30px 40px;
+            background: linear-gradient(135deg, #e8f0fe, #e8f5e9);
+        }
+        .preview-label {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .preview-container {
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            min-height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: inset 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .detail-tabs {
+            display: flex;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .detail-tab-btn {
+            flex: 1;
+            padding: 18px 24px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            color: #666;
+            border-bottom: 3px solid transparent;
+            transition: all 0.2s;
+        }
+        .detail-tab-btn:hover {
+            color: #4285f4;
+            background: #f5f5f5;
+        }
+        .detail-tab-btn.active {
+            color: #4285f4;
+            border-bottom-color: #4285f4;
+            background: white;
+        }
+        .tab-content {
+            padding: 30px 40px;
+        }
+        .tab-pane {
+            display: none;
+        }
+        .tab-pane.active {
+            display: block;
+        }
+        .properties-list {
+            display: grid;
+            gap: 12px;
+        }
+        .property-card {
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 16px;
+            background: #f9f9f9;
+        }
+        .property-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+        }
+        .property-name {
+            font-weight: 600;
+            font-size: 15px;
+        }
+        .property-type {
+            background: #e8f0fe;
+            color: #1976d2;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-family: monospace;
+        }
+        .property-required {
+            background: #fce8e6;
+            color: #c5221f;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        .property-description {
+            color: #333;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+        .property-extra {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .property-default,
+        .property-example {
+            background: white;
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-family: monospace;
+        }
+        .property-default {
+            border-left: 3px solid #f9ab00;
+        }
+        .property-example {
+            border-left: 3px solid #34a853;
+        }
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .code-header span {
+            font-weight: 600;
+            color: #333;
+        }
+        .copy-btn {
+            padding: 6px 14px;
+            border: 1px solid #e0e0e0;
+            background: white;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover {
+            background: #f5f5f5;
+        }
+        pre {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+        code {
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+        }
+        .detail-section {
+            background: #f9f9f9;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .detail-section h4 {
+            color: #333;
+            margin-bottom: 12px;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .detail-section p {
+            color: #666;
+            line-height: 1.8;
+            font-size: 14px;
+        }
+        .use-case-list,
+        .pitfall-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .use-case-list li,
+        .pitfall-list li {
+            padding: 10px 14px;
+            background: white;
+            border-radius: 6px;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: #666;
+        }
+        .use-case-list li {
+            border-left: 3px solid #4285f4;
+        }
+        .pitfall-list li {
+            border-left: 3px solid #f9ab00;
+            background: #fff8e1;
+        }
+        .pattern-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .pattern-item {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid #e0e0e0;
+        }
+        .pattern-title {
+            background: #e8f0fe;
+            color: #1976d2;
+            padding: 10px 14px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        .pattern-code {
+            margin: 0;
+            padding: 14px;
+            background: #1e1e1e;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+        .pattern-code code {
+            color: #d4d4d4;
+        }
+        .tips-content {
+            background: #fef7e0;
+            border-left: 4px solid #f9ab00;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .tips-content h4 {
+            color: #b36b00;
+            margin-bottom: 8px;
+        }
+        .tips-content p {
+            color: #666;
+            line-height: 1.6;
+        }
+        .related-widgets h4 {
+            margin-bottom: 12px;
+            color: #333;
+        }
+        .related-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .related-chip {
+            background: #e8f0fe;
+            color: #1976d2;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+        .related-chip:hover {
+            background: #1976d2;
+            color: white;
+        }
+        @media (max-width: 768px) {
+            .detail-header {
+                padding: 24px;
+            }
+            .detail-header h1 {
+                font-size: 24px;
+            }
+            .preview-section,
+            .tab-content {
+                padding: 20px;
+            }
+            .detail-tab-btn {
+                padding: 14px 12px;
+                font-size: 13px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="detail-page">
+        <!-- 返回导航 -->
+        <div class="back-nav">
+            <button class="back-btn" onclick="goBack()">
+                ← 返回首页
+            </button>
+        </div>
+
+        <!-- Widget 详情卡片 -->
+        <div class="widget-detail-card">
+            <!-- 头部 -->
+            <div class="detail-header">
+                <h1 id="widgetTitle">
+                    Widget 名称
+                    <span id="widgetUsageBadge" class="usage-badge high">常用</span>
+                </h1>
+                <p id="widgetDescription" class="detail-description">描述</p>
+                <div class="detail-meta">
+                    <span id="widgetCategory" class="category-chip">分类</span>
+                    <span id="widgetPropsCount" class="category-chip">0 个属性</span>
+                </div>
+            </div>
+
+            <!-- 预览区 -->
+            <div class="preview-section">
+                <div class="preview-label">预览效果</div>
+                <div id="widgetPreview" class="preview-container"></div>
+            </div>
+
+            <!-- Tab 导航 -->
+            <div class="detail-tabs">
+                <button class="detail-tab-btn active" data-tab="properties" onclick="switchTab('properties')">属性</button>
+                <button class="detail-tab-btn" data-tab="example" onclick="switchTab('example')">示例代码</button>
+                <button class="detail-tab-btn" data-tab="detail" onclick="switchTab('detail')">详细介绍</button>
+                <button class="detail-tab-btn" data-tab="tips" onclick="switchTab('tips')">提示</button>
+            </div>
+
+            <!-- Tab 内容 -->
+            <div class="tab-content">
+                <!-- 属性列表 -->
+                <div id="propertiesTab" class="tab-pane active">
+                    <div id="propertiesList" class="properties-list"></div>
+                </div>
+
+                <!-- 示例代码 -->
+                <div id="exampleTab" class="tab-pane">
+                    <div class="code-header">
+                        <span>使用示例</span>
+                        <button class="copy-btn" onclick="copyCode()">📋 复制</button>
+                    </div>
+                    <pre><code id="exampleCode"></code></pre>
+                </div>
+
+                <!-- 详细介绍 -->
+                <div id="detailTab" class="tab-pane">
+                    <div id="detailContent" class="detail-content"></div>
+                </div>
+
+                <!-- 提示 -->
+                <div id="tipsTab" class="tab-pane">
+                    <div id="tipsContent" class="tips-content"></div>
+                    <div id="relatedWidgets" class="related-widgets"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="detailed-docs.js"></script>
+    <script src="layout-info.js"></script>
+    <script src="data.js"></script>
+    <script>
+        let currentWidget = null;
+
+        // 获取 URL 参数
+        function getWidgetId() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('id');
+        }
+
+        // 初始化页面
+        function init() {
+            const widgetId = getWidgetId();
+            if (!widgetId) {
+                alert('未指定 Widget');
+                window.location.href = 'index.html';
+                return;
+            }
+
+            // 合并详细数据
+            if (typeof WIDGET_DETAILED_DOCS !== 'undefined') {
+                WIDGET_DATA.forEach(widget => {
+                    if (WIDGET_DETAILED_DOCS[widget.id]) {
+                        widget.detailedDoc = WIDGET_DETAILED_DOCS[widget.id];
+                    }
+                });
+            }
+
+            const widget = WIDGET_DATA.find(w => w.id === widgetId);
+            if (!widget) {
+                alert('Widget 不存在');
+                window.location.href = 'index.html';
+                return;
+            }
+
+            currentWidget = widget;
+            renderWidget(widget);
+        }
+
+        // 渲染 Widget 详情
+        function renderWidget(widget) {
+            // 设置头部信息
+            document.getElementById('widgetTitle').innerHTML = `
+                ${widget.name}
+                <span class="usage-badge ${widget.usageLevel}">${widget.usageDisplay}</span>
+            `;
+            document.getElementById('widgetDescription').textContent = widget.description;
+            document.getElementById('widgetCategory').textContent = widget.categoryDisplay;
+            document.getElementById('widgetPropsCount').textContent = widget.properties.length + ' 个属性';
+
+            // 设置预览
+            document.getElementById('widgetPreview').innerHTML = widget.preview;
+
+            // 设置属性列表
+            const propsList = document.getElementById('propertiesList');
+            propsList.innerHTML = widget.properties.map(prop => `
+                <div class="property-card">
+                    <div class="property-header">
+                        <span class="property-name">${prop.name}</span>
+                        <span class="property-type">${prop.type}</span>
+                        ${prop.required ? '<span class="property-required">必填</span>' : ''}
+                    </div>
+                    <p class="property-description">${prop.description}</p>
+                    <div class="property-extra">
+                        ${prop.defaultValue ? `<span class="property-default">默认：${prop.defaultValue}</span>` : ''}
+                        ${prop.example ? `<span class="property-example">示例：${prop.example}</span>` : ''}
+                    </div>
+                </div>
+            `).join('');
+
+            // 设置示例代码
+            document.getElementById('exampleCode').textContent = widget.usageExample || '暂无示例代码';
+
+            // 设置详细介绍
+            const detailContent = document.getElementById('detailContent');
+            if (widget.detailedDoc || WIDGET_LAYOUT_INFO[widget.id]) {
+                const doc = widget.detailedDoc || {};
+                const layoutInfo = WIDGET_LAYOUT_INFO[widget.id] || {};
+                
+                detailContent.innerHTML = `
+                    ${doc.overview ? `
+                        <div class="detail-section">
+                            <h4>📖 概述</h4>
+                            <p>${doc.overview}</p>
+                        </div>
+                    ` : ''}
+
+                    ${doc.useCases && doc.useCases.length > 0 ? `
+                        <div class="detail-section">
+                            <h4>🎯 使用场景</h4>
+                            <ul class="use-case-list">
+                                ${doc.useCases.map(item => `<li>${item}</li>`).join('')}
+                            </ul>
+                        </div>
+                    ` : ''}
+
+                    ${doc.commonPatterns && doc.commonPatterns.length > 0 ? `
+                        <div class="detail-section">
+                            <h4>💡 常用模式</h4>
+                            <div class="pattern-list">
+                                ${doc.commonPatterns.map(pattern => `
+                                    <div class="pattern-item">
+                                        <div class="pattern-title">${pattern.title}</div>
+                                        <pre class="pattern-code"><code>${pattern.code}</code></pre>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    ` : ''}
+
+                    ${layoutInfo.sizing ? `
+                        <div class="detail-section" style="background: #e3f2fd; border-left: 4px solid #1976d2;">
+                            <h4>📐 尺寸计算</h4>
+                            <p>${layoutInfo.sizing}</p>
+                        </div>
+                    ` : ''}
+
+                    ${layoutInfo.constraints ? `
+                        <div class="detail-section" style="background: #e8f5e9; border-left: 4px solid #4caf50;">
+                            <h4>🔧 约束确定</h4>
+                            <p>${layoutInfo.constraints}</p>
+                        </div>
+                    ` : ''}
+
+                    ${layoutInfo.layoutBehavior ? `
+                        <div class="detail-section" style="background: #f3e5f5; border-left: 4px solid #9c27b0;">
+                            <h4>🔄 布局行为</h4>
+                            <p>${layoutInfo.layoutBehavior}</p>
+                        </div>
+                    ` : ''}
+
+                    ${doc.pitfalls && doc.pitfalls.length > 0 ? `
+                        <div class="detail-section">
+                            <h4>⚠️ 注意事项</h4>
+                            <ul class="pitfall-list">
+                                ${doc.pitfalls.map(item => `<li>${item}</li>`).join('')}
+                            </ul>
+                        </div>
+                    ` : ''}
+
+                    ${layoutInfo.commonIssues && layoutInfo.commonIssues.length > 0 ? `
+                        <div class="detail-section" style="background: #fff3e0; border-left: 4px solid #ff9800;">
+                            <h4>🚨 常见错误</h4>
+                            <ul class="pitfall-list">
+                                ${layoutInfo.commonIssues.map(item => `<li>${item}</li>`).join('')}
+                            </ul>
+                        </div>
+                    ` : ''}
+
+                    ${doc.performance ? `
+                        <div class="detail-section">
+                            <h4>⚡ 性能提示</h4>
+                            <p>${doc.performance}</p>
+                        </div>
+                    ` : ''}
+                `;
+            } else {
+                detailContent.innerHTML = '<p style="text-align:center;color:#999;padding:40px">暂无详细介绍</p>';
+            }
+
+            // 设置提示和相关 Widget
+            const tipsContent = document.getElementById('tipsContent');
+            if (widget.tips) {
+                tipsContent.innerHTML = `<h4>💡 使用提示</h4><p>${widget.tips}</p>`;
+                tipsContent.style.display = 'block';
+            } else {
+                tipsContent.style.display = 'none';
+            }
+
+            const relatedWidgets = document.getElementById('relatedWidgets');
+            if (widget.relatedWidgets && widget.relatedWidgets.length > 0) {
+                relatedWidgets.innerHTML = `
+                    <h4>相关 Widget</h4>
+                    <div class="related-list">
+                        ${widget.relatedWidgets.map(name => {
+                            const related = WIDGET_DATA.find(w => w.name.toLowerCase() === name.toLowerCase());
+                            if (related) {
+                                return `<a href="widget-detail.html?id=${related.id}" class="related-chip">${name}</a>`;
+                            }
+                            return `<span class="related-chip" style="opacity:0.6;cursor:not-allowed">${name}</span>`;
+                        }).join('')}
+                    </div>
+                `;
+                relatedWidgets.style.display = 'block';
+            } else {
+                relatedWidgets.style.display = 'none';
+            }
+
+            // 更新页面标题
+            document.title = `${widget.name} - Flutter Widget 大全`;
+        }
+
+        // 切换 Tab
+        function switchTab(tabId) {
+            document.querySelectorAll('.detail-tab-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.tab === tabId);
+            });
+            document.querySelectorAll('.tab-pane').forEach(pane => {
+                pane.classList.toggle('active', pane.id === tabId + 'Tab');
+            });
+        }
+
+        // 复制代码
+        function copyCode() {
+            if (!currentWidget || !currentWidget.usageExample) {
+                showToast('暂无示例代码');
+                return;
+            }
+            navigator.clipboard.writeText(currentWidget.usageExample).then(() => {
+                showToast('代码已复制！');
+            }).catch(() => {
+                const textArea = document.createElement('textarea');
+                textArea.value = currentWidget.usageExample;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                showToast('代码已复制！');
+            });
+        }
+
+        // 显示提示
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.style.cssText = `
+                position: fixed;
+                bottom: 24px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: #323232;
+                color: white;
+                padding: 12px 24px;
+                border-radius: 8px;
+                font-size: 14px;
+                z-index: 9999;
+                animation: slideUp 0.3s ease;
+            `;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transition = 'opacity 0.3s';
+                setTimeout(() => toast.remove(), 300);
+            }, 2000);
+        }
+
+        // 返回首页
+        function goBack() {
+            window.location.href = 'index.html';
+        }
+
+        // 添加动画样式
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideUp {
+                from {
+                    opacity: 0;
+                    transform: translateX(-50%) translateY(20px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateX(-50%) translateY(0);
+                }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // 初始化
+        init();
+    </script>
+</body>
+</html>
