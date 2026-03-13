@@ -2268,11 +2268,677 @@ Text(\'Screen width: \${size.width}\');`,
   selectedIndex: _selectedIndex,
   onDestinationSelected: (index) => setState(() => _selectedIndex = index),
   destinations: [
-    NavigationRailDestination(icon: Icon(Icons.home), label: Text(\'Home\')),
-    NavigationRailDestination(icon: Icon(Icons.search), label: Text(\'Search\')),
+    NavigationRailDestination(icon: Icon(Icons.home), label: Text('Home')),
+    NavigationRailDestination(icon: Icon(Icons.search), label: Text('Search')),
   ],
 )`,
     relatedWidgets: ['NavigationRailDestination', 'BottomNavigationBar'],
     preview: '<div style="width:40px;height:60px;background:#f5f5f5;border-radius:4px;display:flex;flex-direction:column;align-items:center;padding:4px;gap:4px"><span style="font-size:16px;color:#1976d2">🏠</span><span style="font-size:16px;color:#999">🔍</span></div>'
+  },
+
+  // ==================== 第三方知名 Widget ====================
+
+  // cached_network_image 包
+  {
+    id: 'cachednetworkimage',
+    name: 'CachedNetworkImage',
+    description: '带缓存的网络图片组件，支持占位符和错误处理',
+    category: 'third-party',
+    categoryDisplay: '第三方',
+    usageLevel: 'high',
+    usageDisplay: '常用',
+    package: 'cached_network_image',
+    properties: [
+      { name: 'imageUrl', type: 'String', required: true, description: '图片 URL' },
+      { name: 'placeholder', type: 'WidgetBuilder?', description: '加载中的占位符' },
+      { name: 'errorWidget', type: 'WidgetBuilder?', description: '加载失败的占位符' },
+      { name: 'fit', type: 'BoxFit?', description: '图片填充方式' },
+      { name: 'cacheKey', type: 'String?', description: '缓存键' },
+      { name: 'memCacheWidth', type: 'int?', description: '内存缓存宽度' }
+    ],
+    usageExample: `CachedNetworkImage(
+  imageUrl: 'https://example.com/image.jpg',
+  placeholder: (context, url) => CircularProgressIndicator(),
+  errorWidget: (context, url, error) => Icon(Icons.error),
+  fit: BoxFit.cover,
+  cacheKey: 'unique_cache_key',
+)`,
+    relatedWidgets: ['Image.network', 'FadeInImage', 'SvgPicture'],
+    preview: '<div style="width:60px;height:40px;background:linear-gradient(135deg,#667eea,#764ba2);border-radius:6px;display:flex;align-items:center;justify-content:center;color:white;font-size:10px">Cache</div>',
+    detailedDoc: {
+      overview: 'CachedNetworkImage 是最流行的 Flutter 图片缓存库，提供自动内存和磁盘缓存功能。它支持图片加载进度显示、自定义占位符、错误处理等丰富功能。',
+      useCases: [
+        '需要缓存的网络图片（头像、商品图等）',
+        '长列表中的图片（减少重复加载）',
+        '需要显示加载进度的场景',
+        '需要自定义错误提示的场景'
+      ],
+      commonPatterns: [
+        { title: '带进度显示', code: 'CachedNetworkImage(imageUrl: url, progressIndicatorBuilder: (c, u, d) => CircularProgressIndicator(value: d.progress))' },
+        { title: '带占位符', code: 'CachedNetworkImage(imageUrl: url, placeholder: (c, u) => Image.asset(\'assets/placeholder.png\'))' },
+        { title: '圆形头像', code: 'CachedNetworkImage(imageUrl: url, imageBuilder: (c, p) => CircleAvatar(backgroundImage: p))' }
+      ],
+      pitfalls: [
+        '首次加载图片仍需要网络请求，缓存只在第二次生效',
+        '缓存大小有限制，可通过 cacheManager 自定义',
+        '本地图片不需要使用此组件'
+      ],
+      performance: '优秀。自动管理内存和磁盘缓存，显著减少网络请求和内存占用。'
+    }
+  },
+
+  // flutter_svg 包
+  {
+    id: 'svgpicture',
+    name: 'SvgPicture',
+    description: '显示 SVG 矢量图片的组件',
+    category: 'third-party',
+    categoryDisplay: '第三方',
+    usageLevel: 'high',
+    usageDisplay: '常用',
+    package: 'flutter_svg',
+    properties: [
+      { name: 'src', type: 'String', description: 'SVG 资源路径' },
+      { name: 'bytesLoader', type: 'SvgBytesLoader?', description: '从字节加载 SVG' },
+      { name: 'width', type: 'double?', description: '宽度' },
+      { name: 'height', type: 'double?', description: '高度' },
+      { name: 'fit', type: 'BoxFit?', description: '填充方式' },
+      { name: 'colorFilter', type: 'ColorFilter?', description: '颜色滤镜' }
+    ],
+    usageExample: `// 从资源加载
+SvgPicture.asset('assets/icon.svg', width: 24, height: 24)
+
+// 从网络加载
+SvgPicture.network('https://example.com/icon.svg')
+
+// 从字符串加载
+SvgPicture.string('<svg>...</svg>')
+
+// 带颜色过滤
+SvgPicture.asset('icon.svg', colorFilter: ColorFilter.mode(Colors.blue, BlendMode.srcIn))`,
+    relatedWidgets: ['Image', 'Icon', 'Picture'],
+    preview: '<div style="width:40px;height:40px;background:#1976d2;border-radius:8px;display:flex;align-items:center;justify-content:center;color:white;font-size:18px">SVG</div>',
+    detailedDoc: {
+      overview: 'flutter_svg 是官方推荐的 SVG 渲染库，支持完整的 SVG 1.1 规范。相比位图，SVG 矢量图可以无损缩放，适合图标、logo 等场景。',
+      useCases: [
+        '显示图标、logo 等矢量图形',
+        '需要多尺寸适配的图片',
+        '需要动态改变颜色的图标',
+        '复杂的矢量图形展示'
+      ],
+      commonPatterns: [
+        { title: '动态颜色图标', code: 'SvgPicture.asset(\'icon.svg\', colorFilter: ColorFilter.mode(iconColor, BlendMode.srcIn))' },
+        { title: '固定尺寸', code: 'SvgPicture.asset(\'icon.svg\', width: 24, height: 24)' },
+        { title: '网络 SVG', code: 'SvgPicture.network(svgUrl, height: 100)' }
+      ],
+      pitfalls: [
+        '复杂的 SVG 文件可能渲染较慢',
+        '不支持 SVG 1.2 和 CSS 样式',
+        '从网络加载需要缓存时建议配合 cached_network_image 使用'
+      ],
+      performance: '良好。简单 SVG 性能优秀，复杂路径需要预渲染优化。'
+    }
+  },
+
+  // shimmer 包
+  {
+    id: 'shimmer',
+    name: 'Shimmer',
+    description: '骨架屏加载动画效果',
+    category: 'third-party',
+    categoryDisplay: '第三方',
+    usageLevel: 'high',
+    usageDisplay: '常用',
+    package: 'shimmer',
+    properties: [
+      { name: 'duration', type: 'Duration', description: '动画持续时间', defaultValue: 'Duration(milliseconds: 1500)' },
+      { name: 'direction', type: 'ShimmerDirection', description: '动画方向', defaultValue: 'ShimmerDirection.ltr' },
+      { name: 'enabled', type: 'bool', description: '是否启用动画', defaultValue: 'true' },
+      { name: 'child', type: 'Widget', required: true, description: '子组件' }
+    ],
+    usageExample: `Shimmer.fromColors(
+  baseColor: Colors.grey[300]!,
+  highlightColor: Colors.grey[100]!,
+  duration: Duration(milliseconds: 1500),
+  child: Column(
+    children: [
+      Container(width: 60, height: 60, decoration: BoxDecoration(color: Colors.white, shape: BoxShape.circle)),
+      SizedBox(height: 16),
+      Container(width: 200, height: 16, decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(8))),
+    ],
+  ),
+)`,
+    relatedWidgets: ['LinearProgressIndicator', 'Skeletonizer'],
+    preview: '<div style="width:60px;height:60px;background:linear-gradient(90deg,#f0f0f0 25%,#e0e0e0 50%,#f0f0f0 75%);background-size:200% 100%;border-radius:50%;animation:shimmer 1.5s infinite"></div><style>@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}</style>',
+    detailedDoc: {
+      overview: 'Shimmer 提供优雅的骨架屏加载效果，在数据加载时显示占位符动画，提升用户体验。支持自定义基础色和高亮色，可控制动画方向和速度。',
+      useCases: [
+        '列表数据加载中的占位显示',
+        '卡片内容加载前的骨架展示',
+        '图片加载前的占位符',
+        '任何需要加载动画的场景'
+      ],
+      commonPatterns: [
+        { title: '列表骨架', code: 'ListView.builder(itemBuilder: (c, i) => Shimmer(child: ListTile(...)))' },
+        { title: '卡片骨架', code: 'Shimmer(child: Card(child: Column(children: [ImagePlaceholder(), TextPlaceholder()])))' },
+        { title: '禁用动画', code: 'Shimmer(enabled: loaded, child: content)' }
+      ],
+      pitfalls: [
+        '动画会持续消耗资源，数据加载完成后应设置 enabled: false',
+        '过多 Shimmer 同时动画可能影响性能',
+        '需要合理设置 baseColor 和 highlightColor 以匹配主题'
+      ],
+      performance: '良好。使用 ShaderMask 实现，适量使用性能优秀。'
+    }
+  },
+
+  // flutter_swiper / card_swiper 包
+  {
+    id: 'cardswiper',
+    name: 'CardSwiper',
+    description: '卡片轮播组件，支持自定义卡片样式',
+    category: 'third-party',
+    categoryDisplay: '第三方',
+    usageLevel: 'medium',
+    usageDisplay: '一般',
+    package: 'card_swiper',
+    properties: [
+      { name: 'itemCount', type: 'int', required: true, description: '卡片数量' },
+      { name: 'itemBuilder', type: 'SwiperItemBuilder', required: true, description: '卡片构建器' },
+      { name: 'scrollDirection', type: 'Axis', description: '滚动方向', defaultValue: 'Axis.horizontal' },
+      { name: 'autoplay', type: 'bool', description: '是否自动播放', defaultValue: 'false' },
+      { name: 'duration', type: 'Duration', description: '动画持续时间', defaultValue: 'Duration(milliseconds: 300)' },
+      { name: 'layout', type: 'SwiperLayout', description: '布局类型', defaultValue: 'SwiperLayout.DEFAULT' }
+    ],
+    usageExample: `CardSwiper(
+  itemCount: bannerList.length,
+  itemBuilder: (context, index) => Image.network(bannerList[index]),
+  autoplay: true,
+  duration: 800,
+  layout: SwiperLayout.STACK,
+  pagination: SwiperPagination(),
+  control: SwiperControl(),
+)`,
+    relatedWidgets: ['PageView', 'Swiper', 'CarouselSlider'],
+    preview: '<div style="width:80px;height:40px;position:relative"><div style="position:absolute;left:0;width:60px;height:40px;background:#64b5f6;border-radius:8px;opacity:0.7"></div><div style="position:absolute;left:10px;width:60px;height:40px;background:#1976d2;border-radius:8px"></div></div>',
+    detailedDoc: {
+      overview: 'CardSwiper 是功能强大的卡片轮播组件，支持多种布局模式（默认、堆叠、圆形等）、自动播放、分页器和控制器。是 flutter_swiper 的升级版。',
+      useCases: [
+        '首页轮播广告图',
+        '图片画廊展示',
+        '卡片堆叠效果',
+        '圆形菜单轮播'
+      ],
+      commonPatterns: [
+        { title: '自动轮播', code: 'CardSwiper(itemCount: count, itemBuilder: builder, autoplay: true, autoplayDelay: 3000)' },
+        { title: '堆叠效果', code: 'CardSwiper(layout: SwiperLayout.STACK, itemCount: count, itemBuilder: builder)' },
+        { title: '垂直轮播', code: 'CardSwiper(scrollDirection: Axis.vertical, ...)' }
+      ],
+      pitfalls: [
+        '在 ListView 中使用需要设置 shrinkWrap: true',
+        '自动播放会在页面退出时继续，需要在 dispose 中停止',
+        '自定义布局时注意卡片尺寸计算'
+      ],
+      performance: '良好。使用 PageView 实现，性能优秀。'
+    }
+  },
+
+  // flutter_rating_bar 包
+  {
+    id: 'ratingbar',
+    name: 'RatingBar',
+    description: '星级评分组件',
+    category: 'third-party',
+    categoryDisplay: '第三方',
+    usageLevel: 'medium',
+    usageDisplay: '一般',
+    package: 'flutter_rating_bar',
+    properties: [
+      { name: 'rating', type: 'double', required: true, description: '当前评分' },
+      { name: 'onRatingUpdate', type: 'ValueChanged<double>', required: true, description: '评分更新回调' },
+      { name: 'itemCount', type: 'int', description: '星星数量', defaultValue: '5' },
+      { name: 'itemSize', type: 'double', description: '星星大小', defaultValue: '40.0' },
+      { name: 'color', type: 'Color', description: '选中颜色', defaultValue: 'Colors.amber' },
+      { name: 'allowHalfRating', type: 'bool', description: '是否允许半星', defaultValue: 'true' }
+    ],
+    usageExample: `RatingBar.builder(
+  initialRating: 4,
+  minRating: 1,
+  direction: Axis.horizontal,
+  allowHalfRating: true,
+  itemCount: 5,
+  itemSize: 30,
+  itemPadding: EdgeInsets.symmetric(horizontal: 4),
+  itemBuilder: (context, _) => Icon(Icons.star, color: Colors.amber),
+  onRatingUpdate: (rating) => print(rating),
+)`,
+    relatedWidgets: ['RatingBarIndicator', 'SmoothRatingBar'],
+    preview: '<div style="display:flex;gap:2px"><span style="color:#ffc107;font-size:20px">★</span><span style="color:#ffc107;font-size:20px">★</span><span style="color:#ffc107;font-size:20px">★</span><span style="color:#ffc107;font-size:20px">★</span><span style="color:#e0e0e0;font-size:20px">★</span></div>',
+    detailedDoc: {
+      overview: 'flutter_rating_bar 提供灵活的星级评分组件，支持完整星、半星、自定义图标、指示器模式等。适用于商品评价、服务评分等场景。',
+      useCases: [
+        '商品/服务评价',
+        '电影/音乐评分',
+        '用户反馈收集',
+        '只读评分显示（指示器模式）'
+      ],
+      commonPatterns: [
+        { title: '只读指示器', code: 'RatingBarIndicator(rating: 4.5, itemCount: 5, itemSize: 20)' },
+        { title: '自定义图标', code: 'RatingBar(itemBuilder: (c, _) => Icon(Icons.favorite), ...)' },
+        { title: '整数评分', code: 'RatingBar(allowHalfRating: false, ...)' }
+      ],
+      pitfalls: [
+        '在可滚动组件中使用时需要处理手势冲突',
+        '半星评分需要 allowHalfRating: true',
+        'itemSize 会影响触摸区域大小'
+      ],
+      performance: '优秀。轻量级组件，无性能问题。'
+    }
+  },
+
+  // pull_to_refresh 包
+  {
+    id: 'smartrefresher',
+    name: 'SmartRefresher',
+    description: '下拉刷新和上拉加载组件',
+    category: 'third-party',
+    categoryDisplay: '第三方',
+    usageLevel: 'high',
+    usageDisplay: '常用',
+    package: 'pull_to_refresh',
+    properties: [
+      { name: 'controller', type: 'RefreshController', required: true, description: '刷新控制器' },
+      { name: 'onRefresh', type: 'VoidCallback?', description: '下拉刷新回调' },
+      { name: 'onLoading', type: 'VoidCallback?', description: '上拉加载回调' },
+      { name: 'header', type: 'Widget?', description: '自定义头部刷新指示器' },
+      { name: 'footer', type: 'Widget?', description: '自定义底部加载指示器' },
+      { name: 'child', type: 'Widget', required: true, description: '可滚动的子组件' }
+    ],
+    usageExample: `SmartRefresher(
+  controller: _refreshController,
+  onRefresh: _onRefresh,
+  onLoading: _onLoading,
+  header: ClassicHeader(),
+  footer: ClassicFooter(),
+  child: ListView.builder(
+    itemCount: items.length,
+    itemBuilder: (context, index) => ListTile(title: Text(items[index])),
+  ),
+)`,
+    relatedWidgets: ['RefreshIndicator', 'CustomScrollView', 'SliverToBoxAdapter'],
+    preview: '<div style="width:60px;height:80px;background:#f5f5f5;border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px"><span style="font-size:16px;color:#1976d2">↓</span><span style="font-size:8px;color:#999">刷新</span></div>',
+    detailedDoc: {
+      overview: 'pull_to_refresh 提供完整的下拉刷新和上拉加载解决方案，支持多种内置样式（经典、Material、Cupertino 等），可自定义头部和底部指示器。',
+      useCases: [
+        '列表下拉刷新数据',
+        '列表上拉加载更多',
+        '需要自定义刷新样式的场景',
+        '同时需要刷新和加载的场景'
+      ],
+      commonPatterns: [
+        { title: '经典样式', code: 'SmartRefresher(header: ClassicHeader(), footer: ClassicFooter(), ...)' },
+        { title: 'Material 样式', code: 'SmartRefresher(header: MaterialHeader(), ...)' },
+        { title: '禁用加载', code: 'SmartRefresher(enablePullUp: false, ...)' }
+      ],
+      pitfalls: [
+        '需要在 refresh 和 loading 完成后调用 controller 的方法结束状态',
+        'child 必须是可滚动组件（ListView、GridView 等）',
+        '在 NestedScrollView 中需要特殊处理'
+      ],
+      performance: '优秀。基于 Notification 机制，性能开销小。'
+    }
+  },
+
+  // flutter_animate 包
+  {
+    id: 'animate',
+    name: 'Animate',
+    description: '声明式动画组件，简化动画实现',
+    category: 'third-party',
+    categoryDisplay: '第三方',
+    usageLevel: 'medium',
+    usageDisplay: '一般',
+    package: 'flutter_animate',
+    properties: [
+      { name: 'duration', type: 'Duration', description: '动画持续时间' },
+      { name: 'delay', type: 'Duration', description: '动画延迟时间' },
+      { name: 'curve', type: 'Curve', description: '动画曲线' },
+      { name: 'effects', type: 'List<Effect>', description: '效果列表，如 FadeEffect、ScaleEffect 等' }
+    ],
+    usageExample: `// 使用扩展方法
+Text('Hello')
+  .animate()
+  .fadeIn(duration: 600.ms)
+  .slideX(begin: -0.5, end: 0);
+
+// 使用 Animate 组件
+Animate(
+  effects: [
+    FadeEffect(duration: 600.ms),
+    ScaleEffect(duration: 600.ms),
+  ],
+  child: Text('Hello'),
+)`,
+    relatedWidgets: ['AnimatedOpacity', 'AnimatedContainer', 'AnimationController'],
+    preview: '<div style="width:50px;height:30px;background:#64b5f6;border-radius:6px;animation:fadeIn 1s ease-in-out">Animate</div><style>@keyframes fadeIn{0%{opacity:0;transform:translateX(-10px)}100%{opacity:1;transform:translateX(0)}}</style>',
+    detailedDoc: {
+      overview: 'flutter_animate 提供简洁的声明式 API 来实现复杂动画，无需手动管理 AnimationController。支持链式调用、效果组合、时间单位扩展等功能。',
+      useCases: [
+        '页面进入/退出动画',
+        '列表项依次动画',
+        '按钮交互动画',
+        '任何需要简单动画的场景'
+      ],
+      commonPatterns: [
+        { title: '依次动画', code: 'ListView(children: items.map((e) => e.animate(delay: 100.ms).fadeIn()).toList())' },
+        { title: '组合效果', code: 'child.animate().fadeIn().slideX().scale()' },
+        { title: '自定义效果', code: 'Animate(effects: [CustomEffect(...)], child: child)' }
+      ],
+      pitfalls: [
+        '大量动画同时执行可能影响性能',
+        '需要精确控制动画时使用传统 AnimationController',
+        '时间单位扩展需要导入 flutter_animate 包'
+      ],
+      performance: '良好。底层使用 Flutter 原生动画系统，性能优秀。'
+    }
+  },
+
+  // get 包 - GetMaterialApp
+  {
+    id: 'getmaterialapp',
+    name: 'GetMaterialApp',
+    description: 'GetX 路由和状态管理的应用入口',
+    category: 'third-party',
+    categoryDisplay: '第三方',
+    usageLevel: 'high',
+    usageDisplay: '常用',
+    package: 'get',
+    properties: [
+      { name: 'home', type: 'Widget?', description: '首页' },
+      { name: 'getPages', type: 'List<GetPage>?', description: '路由页面列表' },
+      { name: 'initialRoute', type: 'String?', description: '初始路由' },
+      { name: 'defaultTransition', type: 'Transition?', description: '默认过渡动画' },
+      { name: 'theme', type: 'ThemeData?', description: '应用主题' },
+      { name: 'enableLog', type: 'bool?', description: '是否启用日志' }
+    ],
+    usageExample: `GetMaterialApp(
+  title: 'My App',
+  initialRoute: '/',
+  getPages: [
+    GetPage(name: '/', page: () => HomePage()),
+    GetPage(name: '/detail', page: () => DetailPage(), transition: Transition.cupertino),
+  ],
+  theme: ThemeData.light(),
+  enableLog: true,
+)`,
+    relatedWidgets: ['MaterialApp', 'GetPage', 'GetX'],
+    preview: '<div style="width:80px;height:50px;background:#1976d2;border-radius:8px;display:flex;align-items:center;justify-content:center;color:white;font-size:10px">GetX App</div>',
+    detailedDoc: {
+      overview: 'GetMaterialApp 是 GetX 包提供的 MaterialApp 替代品，在保留所有 MaterialApp 功能的基础上，增加了路由管理、依赖注入、主题切换等便捷功能。',
+      useCases: [
+        '使用 GetX 进行路由管理',
+        '需要简单状态管理的场景',
+        '需要全局 Snackbar/Dialog 的场景',
+        '多语言国际化应用'
+      ],
+      commonPatterns: [
+        { title: '命名路由', code: 'Get.toNamed(\'/detail\');' },
+        { title: '带参数路由', code: 'Get.to(() => DetailPage(), arguments: data);' },
+        { title: '替换路由', code: 'Get.off(() => NewPage());' }
+      ],
+      pitfalls: [
+        'GetX 是非官方包，大型项目建议谨慎评估',
+        '过度使用全局状态可能导致代码难以维护',
+        '需要理解 GetX 的生命周期管理'
+      ],
+      performance: '优秀。路由和状态管理性能优秀，无额外开销。'
+    }
+  },
+
+  // provider 包 - ChangeNotifierProvider
+  {
+    id: 'changenotifierprovider',
+    name: 'ChangeNotifierProvider',
+    description: 'Provider 状态管理核心组件',
+    category: 'third-party',
+    categoryDisplay: '第三方',
+    usageLevel: 'high',
+    usageDisplay: '常用',
+    package: 'provider',
+    properties: [
+      { name: 'create', type: 'Create<T>', required: true, description: '创建状态对象的回调' },
+      { name: 'child', type: 'Widget?', description: '子组件' },
+      { name: 'builder', type: 'WidgetBuilder?', description: '构建器（与 child 互斥）' },
+      { name: 'dispose', type: 'Dispose<T>?', description: '销毁回调' }
+    ],
+    usageExample: `ChangeNotifierProvider(
+  create: (context) => CartProvider(),
+  child: Consumer<CartProvider>(
+    builder: (context, cart, child) {
+      return Text('Total: \${cart.total}');
+    },
+  ),
+)`,
+    relatedWidgets: ['Provider', 'Consumer', 'Selector'],
+    preview: '<div style="width:60px;height:40px;background:#1976d2;border-radius:8px;display:flex;align-items:center;justify-content:center;color:white;font-size:8px">Provider</div>',
+    detailedDoc: {
+      overview: 'Provider 是官方推荐的状态管理方案，基于 InheritedWidget 实现。ChangeNotifierProvider 是最常用的 Provider 类型，配合 ChangeNotifier 实现状态通知。',
+      useCases: [
+        '应用全局状态管理（用户信息、购物车等）',
+        '跨组件共享数据',
+        '需要响应式更新的场景',
+        '替代 setState 管理复杂状态'
+      ],
+      commonPatterns: [
+        { title: '多 Provider', code: 'MultiProvider(providers: [ChangeNotifierProvider(...), Provider(...)], child: child)' },
+        { title: 'Consumer 局部刷新', code: 'Consumer<Model>(builder: (c, m, _) => Text(m.value))' },
+        { title: 'Selector 性能优化', code: 'Selector<Model, String>(selector: (c, m) => m.value, builder: ...)' }
+      ],
+      pitfalls: [
+        '避免在 build 方法中创建 Provider，会导致重复创建',
+        'Consumer 会重建，复杂场景使用 Selector 优化',
+        '需要在 dispose 中释放资源时，使用 dispose 参数'
+      ],
+      performance: '优秀。基于 InheritedWidget，性能优秀，是官方推荐方案。'
+    }
+  },
+
+  // lottie 包
+  {
+    id: 'lottie',
+    name: 'Lottie',
+    description: '播放 After Effects 动画',
+    category: 'third-party',
+    categoryDisplay: '第三方',
+    usageLevel: 'medium',
+    usageDisplay: '一般',
+    package: 'lottie',
+    properties: [
+      { name: 'asset', type: 'String', description: 'Lottie 资源路径' },
+      { name: 'width', type: 'double?', description: '宽度' },
+      { name: 'height', type: 'double?', description: '高度' },
+      { name: 'repeat', type: 'bool', description: '是否重复播放', defaultValue: 'true' },
+      { name: 'reverse', type: 'bool', description: '是否反向播放', defaultValue: 'false' },
+      { name: 'controller', type: 'AnimationController?', description: '动画控制器' }
+    ],
+    usageExample: `// 从资源播放
+Lottie.asset('assets/loading.json', width: 100, height: 100)
+
+// 从网络播放
+Lottie.network('https://example.com/animation.json')
+
+// 控制播放
+Lottie.asset('animation.json', controller: _animationController)`,
+    relatedWidgets: ['Animation', 'Rive', 'Spinkit'],
+    preview: '<div style="width:50px;height:50px;background:conic-gradient(from 0deg,#1976d2,#64b5f6,#1976d2);border-radius:50%;animation:spin 1s linear infinite"></div><style>@keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}</style>',
+    detailedDoc: {
+      overview: 'Lottie 支持播放 After Effects 导出的 JSON 动画文件，提供丰富的动效资源。lottie 包是 Flutter 社区的实现，支持资源、网络、文件等多种加载方式。',
+      useCases: [
+        '加载动画（loading、success、error）',
+        '引导页动画',
+        '按钮交互动画',
+        '复杂的 UI 动效'
+      ],
+      commonPatterns: [
+        { title: '自动播放', code: 'Lottie.asset(\'animation.json\', repeat: true)' },
+        { title: '控制播放', code: 'Lottie.asset(\'animation.json\', controller: _controller, onLoaded: (composition) {...})' },
+        { title: '网络动画', code: 'Lottie.network(url, repeat: false)' }
+      ],
+      pitfalls: [
+        '复杂的 Lottie 文件可能影响性能',
+        '大文件需要预加载',
+        '在列表中使用注意复用问题'
+      ],
+      performance: '中等。简单动画性能优秀，复杂动画需要优化。'
+    }
+  },
+
+  // flutter_spinkit 包
+  {
+    id: 'spinkit',
+    name: 'SpinKit',
+    description: '多种样式的加载动画集合',
+    category: 'third-party',
+    categoryDisplay: '第三方',
+    usageLevel: 'medium',
+    usageDisplay: '一般',
+    package: 'flutter_spinkit',
+    properties: [
+      { name: 'color', type: 'Color?', description: '加载动画颜色' },
+      { name: 'size', type: 'double?', description: '加载动画大小' },
+      { name: 'duration', type: 'Duration?', description: '动画持续时间' }
+    ],
+    usageExample: `// 旋转圆圈
+SpinKitFadingCircle(color: Colors.blue)
+
+// 脉冲效果
+SpinKitPulse(color: Colors.blue)
+
+// 波浪效果
+SpinKitWave(color: Colors.blue, itemCount: 5)
+
+// 三球旋转
+SpinKitThreeBounce(color: Colors.blue)`,
+    relatedWidgets: ['CircularProgressIndicator', 'Lottie', 'Shimmer'],
+    preview: '<div style="display:flex;gap:4px"><span style="width:12px;height:12px;background:#1976d2;border-radius:50%;animation:pulse1 1s infinite"></span><span style="width:12px;height:12px;background:#1976d2;border-radius:50%;animation:pulse2 1s infinite"></span><span style="width:12px;height:12px;background:#1976d2;border-radius:50%;animation:pulse3 1s infinite"></span></div><style>@keyframes pulse1{0%,100%{opacity:1}50%{opacity:0.3}}@keyframes pulse2{0%,100%{opacity:0.3}50%{opacity:1}}@keyframes pulse3{0%,100%{opacity:0.5}50%{opacity:0.5}}</style>',
+    detailedDoc: {
+      overview: 'flutter_spinkit 提供 50+ 种精美的加载动画样式，无需自定义动画即可使用。每种样式都有对应的 Widget，使用简单。',
+      useCases: [
+        '数据加载中的 loading 提示',
+        '页面刷新动画',
+        '提交处理中的等待动画',
+        '任何需要加载指示的场景'
+      ],
+      commonPatterns: [
+        { title: '经典旋转', code: 'SpinKitFadingCircle(color: Colors.blue, size: 50)' },
+        { title: '脉冲效果', code: 'SpinKitPulse(color: Colors.blue, size: 50)' },
+        { title: '自定义时长', code: 'SpinKitWave(color: Colors.blue, duration: Duration(seconds: 1))' }
+      ],
+      pitfalls: [
+        '动画会持续运行，不需要时及时销毁',
+        '在暗色主题下注意颜色对比度',
+        '部分复杂样式可能影响性能'
+      ],
+      performance: '良好。简单样式性能优秀，复杂样式注意使用场景。'
+    }
+  },
+
+  // auto_size_text 包
+  {
+    id: 'autosizetext',
+    name: 'AutoSizeText',
+    description: '自动调整字体大小以适应容器',
+    category: 'third-party',
+    categoryDisplay: '第三方',
+    usageLevel: 'medium',
+    usageDisplay: '一般',
+    package: 'auto_size_text',
+    properties: [
+      { name: 'data', type: 'String', required: true, description: '文本内容' },
+      { name: 'maxLines', type: 'int?', description: '最大行数' },
+      { name: 'minFontSize', type: 'double', description: '最小字体大小', defaultValue: '12' },
+      { name: 'maxFontSize', type: 'double', description: '最大字体大小', defaultValue: '70' },
+      { name: 'stepGranularity', type: 'double', description: '字体调整粒度', defaultValue: '0.1' },
+      { name: 'style', type: 'TextStyle?', description: '文本样式' }
+    ],
+    usageExample: `AutoSizeText(
+  'This is a very long text that should automatically resize to fit the container',
+  minFontSize: 10,
+  maxFontSize: 20,
+  maxLines: 2,
+  overflow: TextOverflow.ellipsis,
+)`,
+    relatedWidgets: ['Text', 'RichText', 'FittedBox'],
+    preview: '<div style="width:80px;height:30px;background:#f5f5f5;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:10px;color:#666;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Auto Fit Text</div>',
+    detailedDoc: {
+      overview: 'AutoSizeText 自动调整字体大小以适配给定约束，解决文本溢出问题。支持设置最小/最大字体范围、最大行数等，是 Text 的智能替代品。',
+      useCases: [
+        '动态长度的标题文本',
+        '需要适配不同屏幕的文本',
+        '按钮内的自适应文本',
+        '卡片标题等受限空间文本'
+      ],
+      commonPatterns: [
+        { title: '单行适配', code: 'AutoSizeText(title, minFontSize: 12, maxFontSize: 20, maxLines: 1)' },
+        { title: '多行截断', code: 'AutoSizeText(text, maxLines: 2, overflow: TextOverflow.ellipsis)' },
+        { title: 'RichText 支持', code: 'AutoSizeText.rich(TextSpan(children: [...]))' }
+      ],
+      pitfalls: [
+        '字体计算需要额外开销，大量使用注意性能',
+        'minFontSize 设置过小可能影响可读性',
+        '在列表中使用建议缓存计算结果'
+      ],
+      performance: '良好。字体计算开销小，大量使用时注意优化。'
+    }
+  },
+
+  // flutter_staggered_grid_view 包
+  {
+    id: 'staggeredgridview',
+    name: 'StaggeredGridView',
+    description: '瀑布流网格布局',
+    category: 'third-party',
+    categoryDisplay: '第三方',
+    usageLevel: 'medium',
+    usageDisplay: '一般',
+    package: 'flutter_staggered_grid_view',
+    properties: [
+      { name: 'crossAxisCount', type: 'int', required: true, description: '列数' },
+      { name: 'mainAxisSpacing', type: 'double', description: '主轴方向间距' },
+      { name: 'crossAxisSpacing', type: 'double', description: '交叉轴方向间距' },
+      { name: 'staggeredTileBuilder', type: 'StaggeredTileBuilder', required: true, description: '瀑布流瓦片构建器' },
+      { name: 'itemCount', type: 'int', required: true, description: '子项数量' },
+      { name: 'itemBuilder', type: 'IndexedWidgetBuilder', required: true, description: '子项构建器' }
+    ],
+    usageExample: `StaggeredGridView.countBuilder(
+  crossAxisCount: 2,
+  mainAxisSpacing: 8,
+  crossAxisSpacing: 8,
+  staggeredTileBuilder: (index) => StaggeredTile.count(1, index.isEven ? 2 : 1),
+  itemBuilder: (context, index) => Card(child: Center(child: Text('\$index'))),
+  itemCount: 20,
+)`,
+    relatedWidgets: ['GridView', 'MasonryGridView', 'SliverStaggeredGrid'],
+    preview: '<div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;width:60px"><div style="background:#e57373;border-radius:4px;height:40px"></div><div style="background:#81c784;border-radius:4px;height:20px"></div><div style="background:#64b5f6;border-radius:4px;height:20px"></div><div style="background:#ffd54f;border-radius:4px;height:40px"></div></div>',
+    detailedDoc: {
+      overview: 'flutter_staggered_grid_view 提供瀑布流布局，支持不同高度的网格项。新版 API 更简洁，支持 MasonryGridView 等新组件。',
+      useCases: [
+        '图片墙（不同尺寸图片）',
+        '商品展示（不同内容高度）',
+        '笔记卡片（类似 Pinterest）',
+        '任何需要不等高网格的场景'
+      ],
+      commonPatterns: [
+        { title: 'MasonryGridView', code: 'MasonryGridView.count(crossAxisCount: 2, mainAxisSpacing: 8, itemBuilder: ...)' },
+        { title: '自定义瓦片', code: 'staggeredTileBuilder: (i) => StaggeredTile.count(1, i.isEven ? 2 : 1)' },
+        { title: 'Sliver 版本', code: 'SliverStaggeredGrid.countBuilder(...)' }
+      ],
+      pitfalls: [
+        '在 NestedScrollView 中需要特殊处理',
+        '动态内容高度可能导致布局闪烁',
+        '注意 API 版本差异（0.x 和 0.7+）'
+      ],
+      performance: '良好。基于 GridView 实现，性能优秀。'
+    }
   }
 ];

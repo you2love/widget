@@ -221,11 +221,21 @@ body {
     gap: 8px;
     align-items: center;
     margin-bottom: 8px;
+    flex-wrap: wrap;
 }
 
 .category-chip {
     background: var(--primary-light);
     color: var(--primary-color);
+    padding: 3px 10px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.package-chip {
+    background: #fce8e6;
+    color: #c5221f;
     padding: 3px 10px;
     border-radius: 6px;
     font-size: 11px;

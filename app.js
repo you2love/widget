@@ -84,18 +84,18 @@ function initTabs() {
 function renderWidgets() {
   const list = document.getElementById('widgetList');
   const emptyState = document.getElementById('emptyState');
-  
+
   const filtered = getFilteredWidgets();
-  
+
   if (filtered.length === 0) {
     list.style.display = 'none';
     emptyState.style.display = 'block';
     return;
   }
-  
+
   list.style.display = 'grid';
   emptyState.style.display = 'none';
-  
+
   list.innerHTML = filtered.map(widget => `
     <div class="widget-card" onclick="location.href='widget-detail.html?id=${widget.id}'">
       <div class="widget-card-content">
@@ -105,6 +105,7 @@ function renderWidgets() {
         </div>
         <div class="widget-meta">
           <span class="category-chip">${widget.categoryDisplay}</span>
+          ${widget.package ? `<span class="package-chip">📦 ${widget.package}</span>` : ''}
           <span class="props-count">${widget.properties.length} 个属性</span>
         </div>
         <p class="widget-description">${widget.description}</p>
